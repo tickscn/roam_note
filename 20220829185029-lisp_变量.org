@@ -4,6 +4,24 @@
 #+title: lisp 变量
 * 赋值
 不需要提前声明，可以直接使用 =setq= 对变量赋值
-#+begin_src lisp
+#+begin_src elisp
  (setq user_name "xiehuiwu")
 #+end_src
+* 定义
+除了使用 =setq= 外，还可以使用 =defvar=.
+#+begin_src elisp
+(defvar user_emial "xiehuiwu@foxmail.com"
+  "user's email")
+#+end_src
+ 和 =setq= 的不同是如果这个变量之前已经有值了， 这个语句不改变变量原来的值。
+ 而且 =defvar= 可以为变量提供文档字符串
+*  局部变量
+ 使用 =let= 和 =let*=
+#+begin_src elisp
+(defun circle-area (radio)
+  (let (pi 3.1415926)
+    area)
+  (setq area (* pi radix radix))
+  )
+#+end_src
+=let*= 和 =let= 不同的是在声明中就可以使用前面声明的变量
