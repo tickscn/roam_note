@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       d2b97325-653d-41fb-8c5f-5921d17c8caf
+:END:
+#+title: sql 删除记录
+语法
+- =DELETE= 语名
+  #+begin_src sql
+  delete from table_name
+               where xxxx;
+  #+end_src
+   如果省略 where, 所有的记录会被删除
+- =TRUNCATE=
+  #+begin_src sql
+        truncate table_name
+  #+end_src
+   删除 table_name 表中的所有数据。和 =delete from table_name= 相比，速度更快。
+   delete 是 dml,  会放到 rollback segmentmant，可以回滚。
+   truncate 是 ddl.
+- =DROP=
+  #+begin_src sql
+    drop table_name
+  #+end_src
+ 删除 =table_name= 表。

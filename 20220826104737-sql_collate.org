@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       7a6b0561-f7b1-4ed3-ba88-b01e0ebd5564
+:END:
+#+title: mysql collate
+[[id:307577b1-d1df-44dc-93fc-7965ac94a272][mysql create table]]
+mysql 中建表语名中，最后可以指定 =Engine=, =CHARSET=, =COLLATE=. 其中 =COLLATE= 是做什么的呢？
+
+* 一名话总结
+=COLLATE= 是用来指定排序规则的。会影响字符类型的排序，索引创建等涉及字符类型比较排序的地方
+* COLLATE
+在 mysql 中使用 =show collation= 可以查到 mysql 支持的所有 COLLATE。 =COLLATE= 通常是和 =CHARSET= 相关的。
+一种 =CHARSET= 都有一种或多种 =COLLATE=
+
+#+begin_quote
+国内常用的 CHARSET 是 =utf8mb4=
+#+end_quote
+
+=utf8mb4= 常用的排序规则有3个 =utf8mb4_generic_ci= (默认), =utf8mb4_unicode_ci=, =utf8mb4_bin=
+其中 ci 是 case insensitive， 大小写不敏感的意思
+
+- =utf8mb4_bin=
+  这个排序类型将字符看作二进制串，从高位向低位对比, 显然这个排序是区分大小写的
+- =utf8mb4_generic_ci= vs =utf8mb4_unicode_ci=
+  这两种类型都是 unicode 的一种排序规则。主要不同
+  - =utf8mb4_unicode_ci= 是基于 unicode 官方排序规则。
+  - =utf8mb4_generic_ci= 相对于 =uncide_ci= 是一种简化的排序规则，采用了一些用来提高速度的捷径。
+    不遵循 unicode 规则。
+
+  建议使用 =utf8mb4_unicode_ci= 因为 =utf8mb4_generic_ci= 提升了一些速度，但是会有一些正确性的问题。
+  目前 mysql 对标 unicode 5.0 也推出了 =utf8mb4_unicode_520_ci=

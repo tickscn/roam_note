@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       97da81bb-985a-472d-a35f-1610c9c9d6f8
+:END:
+#+title: lisp 变量
+* 赋值
+不需要提前声明，可以直接使用 =setq= 对变量赋值
+#+begin_src lisp
+ (setq user_name "xiehuiwu")
+#+end_src

@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       250fc54b-2595-42a2-80fa-b20491a83b9e
+:END:
+#+title: lisp 函数
+[[id:ef77b94c-166f-495c-904a-628b11674a38][lisp 开始]]
+* 定义函数 =defun=
+#+begin_src lisp
+(defun function-name (argument-list)
+  "document string"
+  func-body)
+#+end_src
+ 一个 hello word 的例子
+ #+begin_src lisp
+  (defun HelloWord ()
+    "print hello world"
+    (message "hello world"))
+ #+end_src
+* lambda 表达式
+匿名函数
+#+begin_src lisp
+(lambda (argument-list)
+  "document string"
+  func-body)
+#+end_src
+ 可以使用 =funcall= 调用 lambda
+* 返回值
+默认会把最后一个语句的结果当做返回值返回给调用方。
+可以使用 =(return-from func-name return-value)= 指定返回值

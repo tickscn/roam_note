@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       ef77b94c-166f-495c-904a-628b11674a38
+:END:
+#+title: lisp 开始
+#+begin_src elisp
+(message "hello world")
+#+end_src
+
+#+RESULTS:
+: hello world
+
+运行一个函数的方法
+#+begin_src lisp
+(function-name argument-list)
+#+end_src

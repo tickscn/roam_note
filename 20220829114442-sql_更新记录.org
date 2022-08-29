@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       3fa53745-0789-4768-903a-e367336961c8
+:END:
+#+title: sql 更新记录
+- =UPDATE= 语句
+  #+begin_src sql
+    update table_name
+    set column_name = value[,column_name2 = value 2]
+    where xxxx;
+  #+end_src
+ 如果没有 where 子句，会将所有记录更新
+
+  - 批量更新
+    1. 如果更新结果都一致，可以直接使用上面的 =UDPATE= 语句。
+    2. 循环 update。在循环中执行多次更新语句，对更新的字段和值没有要求，容易理解，不容易出错。缺点就是性能较差。
+    3. =insert into ... on duplicate key update=
+       借助唯一键（一般用主键）进行更新，更新结果不需要一致，不过一般第三方库可能不支持这种语法，需要原生 sql. 是 mysql 的扩展， 不是标准 sql 语句。
+    4. =replace into=
+       #+begin_src sql
+        replace into table_name (column1[, column2...]) values (v1[,v2, v3,...]), (v21[, v22, v23,...])
+       #+end_src
+       replace 操作的本质是先删后增，所以如果没有设置的字段不是保持原样而是更新成默认值。
+    5. =case...when= 子句
+       支持批量更新，支持多个字段，多种结果。缺点就是语名长，实现复杂，更容易出错。如果 when 条件里面的不包括所有的记录，缺少的记录会被设置为默认值， 所以如果没有 where 子句，when 中又没有枚举所有的记录，剩下的记录会被更新为默认值
+       #+begin_src sql
+        update table_name
+               set column1 = case id
+                   when id1 then 'value11'
+                   when id2 then 'value12'
+               end,
+                  age = case id
+                  when id1 then 11
+                  when id2 then 12
+                  end
+               where id in(id1,id2);
+       #+end_src
+    6.  临时表
+       创建临时表，插入更新数据。使用联表更新

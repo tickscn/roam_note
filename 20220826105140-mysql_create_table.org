@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       307577b1-d1df-44dc-93fc-7965ac94a272
+:END:
+#+title: mysql create table
+* 语法
+** 通用语法
+    #+begin_src sql
+      CREATE TABLE [IF NOT EXISTS] table_name (column_name column_type[, column_name column_type, ...])
+    #+end_src
+
+** 一个例子
+   #+begin_src sql
+      CREATE TABLE IF NOT EXISTS `runoob_tbl`(
+         `runoob_id` BIGINT PRIMARY KEY,
+         `runoob_title` VARCHAR(100) NOT NULL,
+         `runoob_author` VARCHAR(40) NOT NULL,
+         `submission_date` DATE,
+
+          UNIQUE INDEX idx_runoob_title (runoob_title)
+          INDEX idx_runoob_author (runoob_author)
+      )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8_unicode_ci;
+   #+end_src
+
+*** 指定主键
+1. 可以在主键列属性中用 PRIMARY KEY 指定
+2. 可以在表属性中用 PRIMARY KEY (column_name) 指定。（可以指定联合索引）
+
+*** 普通索引
+建表的时候可以通过表属性设置索引
