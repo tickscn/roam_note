@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       94a8d785-2f61-4229-918e-bb95e1f77ebc
+:END:
+#+title: go 语言坑
+* for range 循环
+=go=
+#+begin_src go
+for idx, value := range strSlice {
+	_ = idx
+	_ = value
+}
+#+end_src
+在上面的代码中每次循环的idx, value是同一个变量，只是每次循环开始的时候被赋值为不同的值。这样下面的把 slice 转不指针的代码就会有问题
+#+begin_src go
+var s1 = []T{T{}, T{}, T{}, T{}}
+var s2 = make([]*T, 0, len(s1))
+for _, v := range s1 {
+	s2 = append(s2, &v)
+}
+#+end_src
+会发现s2中所有的指针值都是相同的。循环和闭包一起用也会有问题
+#+begin_src go
+for _, v := range s1 {
+	go func(){
+		// 想对s1中不同的值并发处理, 最后处理的是确是同一个值。除了结果不符合预期外，还有并发读写的问题，可能造成 fatal panic
+		_ = v
+	} ()
+}
+#+end_src
+
+* interface{} 和 nil
+把空指针赋值给 =interface{}= 的变量后，这个 =interface{}= 不等于 nil

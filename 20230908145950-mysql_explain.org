@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       5108fea9-71b0-43de-b4c5-bd8544f84e58
+:END:
+#+title: mysql explain
+
+* explain 字段
+| 字段           | 描述                       | 取值                                                                                                      |
+|---------------+---------------------------+----------------------------------------------------------------------------------------------------------|
+| id            | 序列号，表示子查询或操仵表的顺序 | 数字，值越大操作越早                                                                                         |
+| select_type   | 操作类型                    | SIMPLE,PRIMARY,SUBQUERY,UNION, UNION RESULT, DERIVED                                                     |
+| table         | 当前表                      |                                                                                                          |
+| partitionns   | 匹配的分区                  |                                                                                                          |
+| type          | 访问的类型                  | 10 种类型，排在前面的类型性能更好  NULL, system, const, eq_ref, ref, ref_or_null,index_merge,range, index, ALL |
+| possible_keys | 可能用到的索引               |                                                                                                          |
+| key           | 实际使用的索引               |                                                                                                          |
+| key_len       | 索引使用的字节数              |                                                                                                          |
+| ref           | 选行时使用的索引列            |                                                                                                          |
+| rows          | 估算的读取行数               |                                                                                                          |
+| filtered      | 查询的表占百分比              |                                                                                                          |
+| Extra         | 一些额外信息                 |                                                                                                          |
+
+* type 详细描述
+
+| type        | describe                  | extra                                |
+|-------------+---------------------------+--------------------------------------|
+| NULL        | 不需要查询的                 | 比如一些计算                            |
+| SYSTEM      | 只有一行记录                 | 很少见到                               |
+| const       | 只索引一次                  | 唯一索引相等                            |
+| eq_ref      | 联表时按主键或唯一键联合       |                                      |
+| ref         | 单表扫描或连接，用的不是唯一索引 |                                      |
+| ref_or_null | 类似 ref,不过需要考虑空       |                                      |
+| index_merge | 用了两个以上的索引            |                                      |
+| range       | 索引范围                    | 查询条件中有 >,<, between, in 等条件     |
+| index       | 索引全部                    | 扫描索引的全部，索引一般比数据小，性能更好一点 |
+| ALL         | 主表全部                    | 数据表全表扫描                          |

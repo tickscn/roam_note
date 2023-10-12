@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       8e739201-df0d-4985-83d1-1b7b0887f057
+:END:
+#+title: mysql 查询重写
+* mysql 会尽可能的优化 sql
+写的 sql 中可能有一些不好的实现，其中有一些重写规则是比较重要的
+** 条件化简
+*** 移除不必要的括号
+#+begin_src sql
+((a = 5) AND (b = c)) OR ((a > c) AND (c < 5))
+/* 可以优化为 */
+(a = 5 AND b = c) OR (a > c AND c < 5)
+#+end_src
+*** 常量传递
+查询条件中某列是等值匹配，当这个等值表达式和其他涉及这一列的表达式用 AND 连接时。可以把其他表达式中的列名用常量替换
+#+begin_src sql
+a = 5 AND b > a /* ==>  a = 5 AND b > 5 */
+#+end_src
+*** 移除永远为 TRUE 或 FALSE 的条件
+*** 常量表达式计算
+** 子查询优化

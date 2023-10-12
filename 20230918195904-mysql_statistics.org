@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       3ee5bf1a-9a30-4d4d-837f-8a9858e8d5e0
+:END:
+#+title: mysql statistics
+
+* 数据统计存储方式
+** 永久性的统计数据
+数据是存到磁盘上的，实际上就是存到了两张数据表中 =innodb_index_stats= =innodb_table_stats=
+*** innodb_table_stats
+这个表是联合主键 (database_name, table_name), 按数据表统计信息，主要有数据行数，聚簇索引的页数，其他索引的页数。这 3 个数据都不是准确值，是估值。
+** 非永久性的统计数据
+存储在内存中，重启或者异常关机时数据会丢失
+** 刷新统计数据
+- 变更的行数大于一个阈值，异步刷新
+- 执行 ANALYZE TABLE table_name;

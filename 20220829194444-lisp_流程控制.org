@@ -1,0 +1,91 @@
+:PROPERTIES:
+:ID:       45861465-f856-4d30-9eaa-93a9805b6d16
+:END:
+#+title: lisp 流程控制
+[[id:250fc54b-2595-42a2-80fa-b20491a83b9e][lisp 函数]]
+* 顺序执行
+在 =defun= 等环境中代码默认就是顺序执行的。但是一些环境中只能执行一个代码块。这个时候就需要 =progn=
+=(progn A B C ...)= 的作用就是包装一个代码块，代码块中的语句顺序执行
+* 分支判断
+elisp 有两个最基本的条件判断表达式 =if= 和 =cond= (类似于其他语言的 switch)
+** =if=
+#+begin_src elisp
+(defun test-max (a b)
+  (if (> a b) a b))
+(test-max 10 11)
+#+end_src
+
+#+RESULTS:
+: 11
+可以看到 if 判断为真之后只能执行一个 a 语句，如果需要有多个语句的时候，可以使用 =progn=
+=if cond then-part else-part= 相当于
+#+begin_src c
+if (cond) {
+        // then-part;
+}else {
+        // else-part;
+}
+#+end_src
+** =cond=
+#+begin_src elisp
+(defun fib (n)
+  "斐波那契数列第 n 项的值"
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (t (+ (fib (- n 1)) (fib (- n 2)))))
+  )
+(fib 10)
+#+end_src
+
+#+RESULTS:
+: 55
+
+** =when=
+#+begin_src elisp
+(when cond A B C...)
+#+end_src
+ 相当于
+ #+begin_src elisp
+(if cond
+    (progn A B C ...)
+    nil)
+ #+end_src
+** =unless=
+#+begin_src elisp
+(unless cond A B C ...)
+#+end_src
+ 相当于
+ #+begin_src elisp
+(if cond
+    nil
+  (progn A B C ...))
+ #+end_src
+
+
+* 循环
+#+begin_src elisp
+(while condition
+  body)
+#+end_src
+
+#+begin_src elisp
+(defun fib2 (n)
+  "斐波那契数列第 n 项实现2"
+  (let ((res 1)
+        (before 1))
+    (while (> n 2)
+      (setq tmp res
+            res (+ res before)
+            before tmp
+            n (- n 1)))
+   res)
+)
+(fib2 10)
+#+end_src
+
+#+RESULTS:
+: 55
+*  逻辑运算
+- =and=: 有短路性质。前面的为 false, 就不执行后面的
+- =or=: 有短路性质。前面的为 true，就不执行后面的
+- =not=

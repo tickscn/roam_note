@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       402f2819-4099-4bbe-8a90-c5a2139c3ee2
+:END:
+#+title: ripgrep 使用
+* 基础
+** 在指定文件中查找
+#+begin_src shell
+rg hello test.txt
+#+end_src
+上面会在 test.txt 文件中搜索含有 hello 的行。 ripgrep 默认支持正则表达式，只需要在匹配字符串用 '' 号括起来就行了
+** 搜索整个目录
+如果省略文件名，就会在整个目录所有文件中搜索，也包含子目录中的文件。
+** 自动过滤
+1. =.gitignore= 中设置忽略的文件
+   - 使用 =--no-ignore= 禁用 =.gitignore= 的忽略
+2. 隐藏的文件 (*unix 中就是文件名以 . 开头的文件)
+   - =--hidden= 或 =-.= 搜索隐藏文
+3. 二进制文件
+   - =--text= 或 =-a= 搜索二进制文件
+
+** 手动过滤
+*** globs
+=-g= 参数，在匹配规则的文件中搜索
+=rg print -g '*.{c,h}'=
+*** 文件类型
+=-t= 参数是文件类型
+=rg print -g '*.{c,h'= 等价于 =rg print -tc=
+
+对应的 =-T= 表示忽略这个类型的文件

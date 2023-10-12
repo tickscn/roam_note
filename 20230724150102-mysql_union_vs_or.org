@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       5bf4bace-2e6c-4eb4-805a-a6fd68ede41a
+:END:
+#+title: mysql union vs or
+- or:
+   多个条件至少满足一个就可以返回，结果是多个查询条件结果的并集
+- union/ union all:
+   多个查询，取并集。 union 会去重， union all 不会去重
+
+or 和 union 的结果是相同的，但是效率有时会有差距。原因在于索引。如果 or 的多个条件中使用的是相同的字段，而且可以使用索引。那下面的查询
+#+begin_src sql
+SELECT * FROM users WHERE name = 'xiehuiwu' or name = 'xhw'
+#+end_src
+
+和使用 =in= 是等价的。会使用 name 字段上的索引。这个时候 or 和 union 的性能差距不大。改用 union 反而可能是性能变差
+#+begin_src sql
+SELECT * FROM users WHERE name in ('xiehuiwu', 'xhw')
+#+end_src
+
+union 比 or 好的情况是两个条件使用不同字段，这两个字段都有索引
+#+begin_src sql
+SELECT * FROM users WHERE name = 'xiehuiwu' or email = 'xiehuiwu@foxmail.com'
+#+end_src
+这个时候如果这个查询使用了 name 索引， email 的匹配需要全表扫描。反之亦然，这个时候使用 union
+#+begin_src sql
+SELECT * FROM users WHERE name = 'xiehuiwu'
+UNION
+SELECT * FROM users WHERE email = 'xiehuiwu@foxmail.com'
+#+end_src
+可以分别用两个索引去查询，性能可能会更好。
+如果都不能用索引的情况下，使用 union 可能会使性能更差

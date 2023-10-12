@@ -12,10 +12,10 @@ mysql 中建表语名中，最后可以指定 =Engine=, =CHARSET=, =COLLATE=. �
 一种 =CHARSET= 都有一种或多种 =COLLATE=
 
 #+begin_quote
-国内常用的 CHARSET 是 =utf8mb4=
+国内常用的 CHARSET 是 =utf8mb4=, =gbk2312=, =gbk=
 #+end_quote
 
-=utf8mb4= 常用的排序规则有3个 =utf8mb4_generic_ci= (默认), =utf8mb4_unicode_ci=, =utf8mb4_bin=
+=utf8mb4= 常用的排序规则有 3 个 =utf8mb4_generic_ci= (默认), =utf8mb4_unicode_ci=, =utf8mb4_bin=
 其中 ci 是 case insensitive， 大小写不敏感的意思
 
 - =utf8mb4_bin=

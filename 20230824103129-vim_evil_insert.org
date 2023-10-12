@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       69597a04-29ae-4bc2-a82d-f914f41c2603
+:END:
+#+title: vim & evil insert
+* 插入
+** 输入 i 进入插入模式
+** 选择模式时输入 Y, 进入 surround 输入
+** 普通模式输入 ysi + textobj, 对 textobj 执行 surround 输入
