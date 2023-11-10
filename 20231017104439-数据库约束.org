@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       8ea18e42-8c13-440d-be6d-572a85ba3443
+:END:
+#+title: 数据库约束
+* 主键约束
+[[id:b1282cfd-c9c1-44d9-bdce-a0c9112c4b71][primary key]]
+* 非空约束
+[[id:e77daba0-93d5-485a-9db4-0b74ad0dd8e9][not null]]
+* 唯一约束
+* 检查性约束
+* 外键约束
+[[id:5dbc2cf6-82d7-40f9-9f74-4cd22c7f2476][foreign key]]

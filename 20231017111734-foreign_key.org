@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID:       5dbc2cf6-82d7-40f9-9f74-4cd22c7f2476
+:END:
+#+title:外键约束 (foreign key)
+外键约束用来建立表之前的关联关系，一张表的外键需要是另一张表的主键。
+* 外键
+1. =employee= 员工表.主键是工号 =employee_id,= 还有一列是所属部门 =dept_id=
+2. =department= 部门表，主键是部门 id =dept_id=
+
+上面两个表可以看到员工表中有一列 =dept_id= 是部门表的主键，就可以称员工表上的 =dept_id= 列是部门表的外键。
+当讨论外键关联关系是，被关联的表部门表被称为主表，员工表被称为从表
+
+- 员工表
+  | Field       | Type         | Null | Key | Default | Extra |
+  |-------------+--------------+------+-----+---------+-------|
+  | employee_id | bigint       | NO   | PRI | NULL    |       |
+  | name        | varchar(100) | YES  |     | NULL    |       |
+  | leader      | bigint       | YES  | MUL | NULL    |       |
+  | dept_id     | bigint       | YES  | MUL | NULL    |       |
+
+- 部门表
+  | Field    | Type   | Null | Key | Default | Extra |
+  |----------+--------+------+-----+---------+-------|
+  | dept_id  | bigint | NO   | PRI | NULL    |       |
+  | name     | json   | NO   |     | NULL    |       |
+  | superior | bigint | YES  |     | NULL    |       |
+  | manager  | bigint | YES  |     | NULL    |       |
+
+* 外键约束
+可以在外键上设置外键约束。 =create table= 或 =update table= 的时候可以设置外键约束，
+需要外键列，引用的主表列，要求外键和引用列字段数目，类型都相同。引用的字段需要有唯一性约束
+1. 插入:
+   现在部门表还没有数据，插入一条用户记录，他的部门 id:1 还不存在，插入的时候就会报错了
+   #+begin_src sql
+     insert into employee (employee_id, name, leader, dept_id) value (1, 'xie1', null, 1);
+   #+end_src
+   执行结果
+   #+begin_quote
+   [23000][1452] Cannot add or update a child row: a foreign key constraint fails (`xhw_test`.`employee`, CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `department` (`dept_id`))
+   #+end_quote
+
+   现在插入一条普通记录
+   #+begin_src sql
+     insert into employee (employee_id, name, leader, dept_id) value (1, 'xie1', null, null);
+   #+end_src
+
+   =mysql> select * from employee;=
+  | employee_id | name | leader | dept_id |
+  |-------------+------+--------+---------|
+  |           1 | xie1 | NULL   | NULL    |
+
+2. 更新:
+   更新外键的值为非法值也会失败
+   #+begin_src sql
+    update employee set dept_id = 1 where employee_id = 1;
+   #+end_src
+
+   现在部门中插入一条记录，并更新员工表中记录引用这条记录
+3. 删除:
+   删除部门中被引用的记录时会报错。
+
+
+
+* 级联删除
+如果想删除主表记录的时候不报错，可以在设置外键约束时设置 reference_option
+- cascade: 从表同步更新或删除
+- set null: 从表外键置空，要求外键没有非空约束
+- restrict: 禁止主表删除或更新引用字段
+- no action: **InnoDB** 中与 restrict 相同，**NDB** 支持延迟检查，如果开启了这个功能，commit 的时候才会执行检查
+- set default: mysql **InnoDB** 和 **NDB** 都不支持设置
